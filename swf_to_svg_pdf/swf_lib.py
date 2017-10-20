@@ -1,7 +1,17 @@
 #!/usr/bin/python
 # coding=utf-8
 
-LIB_PATH = 'librfxswf.dll'
+from sys import platform
+if platform == "linux" or platform == "linux2":
+    # linux
+    LIB_PATH = '../lib/librfxswf.so'
+elif platform == "darwin":
+    # OS X
+    # Haven't tested this but stackoverflow hive brain clearly states you should use .so and not .dylib
+    LIB_PATH = '../lib/librfxswf.so'
+elif platform == "win32":
+    # Windows...
+    LIB_PATH = '..\lib\librfxswf.dll'
 
 from ctypes import *
 
