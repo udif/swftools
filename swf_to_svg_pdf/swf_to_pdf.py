@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+import argparse
 
 """ Open a reference to the librfxswf dynamic library. """
 s = swf_lib.SWF()
@@ -143,9 +144,18 @@ def to_pdf(parsed_list, filename):
     c.save()
 
 def main():
-    parsed = parse_swf('input.swf')
-    to_svg(parsed, 'output.svg')
-    to_pdf([parsed], 'output.pdf')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("infile", help="Input SWF filename")
+    parser.add_argument("-p", "--pdf", type=argparse.FileType('w'), help="Generate PDF output")
+    parser.add_argument("-s", "--svg", type=argparse.FileType('w'), help="Generate SVG output")
+    args = parser.parse_args()
+    print args
+
+    parsed = parse_swf(args.infile)
+    if args.pdf:
+        to_pdf([parsed], args.pdf)
+    if args.svg:
+        to_svg(parsed, args.svg)
 
 if __name__ == '__main__':
     main()
