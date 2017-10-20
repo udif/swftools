@@ -3,7 +3,7 @@ srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 include ../Makefile.common
 
-all: librfxswf$(A) libgfxpdf$(A) libbase$(A) libgfx$(A) libgfxswf$(A)
+all: librfxswf$(A) libgfxpdf$(A) libbase$(A) libgfx$(A) libgfxswf$(A) librfxswf.$(SLEXT)
 
 lame_objects = lame/psymodel.$(O) lame/fft.$(O) lame/newmdct.$(O) lame/quantize.$(O) lame/takehiro.$(O) lame/reservoir.$(O) lame/quantize_pvt.$(O) lame/vbrquantize.$(O) lame/encoder.$(O) lame/id3tag.$(O) lame/version.$(O) lame/tables.$(O) lame/util.$(O) lame/bitstream.$(O) lame/set_get.$(O) lame/VbrTag.$(O) lame/lame.$(O)
 lame_in_source = @lame_in_source@
@@ -179,6 +179,8 @@ librfxswf$(A): Makefile $(rfxswf_objects) rfxswf.$(O) drawer.$(O) $(lame_in_sour
 	rm -f librfxswf$(A)
 	$(AR) r librfxswf$(A) $(rfxswf_objects) rfxswf.$(O) drawer.$(O) $(lame_in_source) $(h263_objects) $(as12compiler_in_source) $(as3compiler_objects)
 	$(RANLIB) librfxswf$(A)
+librfxswf.$(SLEXT): Makefile $(rfxswf_objects) rfxswf.$(O) drawer.$(O) $(lame_in_source) $(h263_objects) $(as12compiler_in_source) $(as3compiler_objects) libbase$(A)
+	$(L) -g -shared -o $@ $(filter-out Makefile,$^) -lz
 
 libgfxpdf$(A): pdf/VectorGraphicOutputDev.cc pdf/VectorGraphicOutputDev.h pdf/pdf.cc pdf/pdf.h
 	cd pdf;$(MAKE) libgfxpdf
