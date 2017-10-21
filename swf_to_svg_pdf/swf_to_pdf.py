@@ -125,7 +125,10 @@ def to_pdf_page(c, parsed):
         c.resetTransforms()
         c.transform(m['sx'], m['r0'], m['r1'], m['sy'], m['tx'], m['ty'])
         for text2 in text['data']:
-            c.setFont('Arial', text2['fontsize'])
+            fontname = 'Arial'
+            for fname in ('Arial', 'TimesNewRoman'):
+                if fname in text2['font'].name: fontname = fname
+            c.setFont(fontname, text2['fontsize'])
             color(text2['color'])
             for i in xrange(len(text2['string'])):
                 c.drawString(text2['startx'] + text2['xpos'][i],
@@ -136,6 +139,7 @@ def to_pdf_page(c, parsed):
 """ Generate and write the PDF file. """
 def to_pdf(parsed_list, filename):
     pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
+    pdfmetrics.registerFont(TTFont('TimesNewRoman', 'Times_New_Roman.ttf'))
     c = Canvas(filename, bottomup = 0, pageCompression = 1)
 
     for parsed in parsed_list:
